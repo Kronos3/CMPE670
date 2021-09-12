@@ -1,0 +1,144 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage{fullpage}
+\usepackage[top=2cm, bottom=4.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{amsmath,amsthm,amsfonts,amssymb,amscd}
+\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{fancyhdr}
+\usepackage{mathrsfs}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{sectsty}
+\usepackage{enumitem}
+\usepackage{siunitx}
+
+
+\sectionfont{\fontsize{14.4}{17}\selectfont}
+\subsectionfont{\fontsize{10}{12}\selectfont}
+
+\hypersetup{%
+  colorlinks=true,
+  linkcolor=blue,
+  linkbordercolor={0 0 1}
+}
+
+\setlength{\parindent}{0.0in}
+\setlength{\parskip}{0.05in}
+
+% Edit these as appropriate
+\newcommand\course{CMPE 670}
+\newcommand\hwnumber{1}                  % <-- homework number
+\newcommand\NetIDa{Andrei Tumbar}           % <-- NetID of person #1
+
+\pagestyle{fancyplain}
+\headheight 35pt
+\lhead{\NetIDa}
+\chead{\textbf{\Large Homework \hwnumber}}
+\rhead{\course \\ \today}
+\lfoot{}
+\cfoot{}
+\rfoot{\small\thepage}
+\headsep 1.5em
+
+\begin{document}
+
+\section*{Question 1}
+
+\begin{enumerate}[label=\alph*)]
+  \item
+   Layer is the idea in which a system is divided into smaller and simpler
+   portions which in turn simplified a problem into a simpler set of problems.
+   Each layer will perform some sort of processing to the original
+   data and pass it on to lower layers. After the data has been processed by the
+   lowest layer, it is passed to the receiving device where the data is unpacked
+   from the lowest to highest layers in order. Using layered architecture will also
+   allow changes to the design or operation of a single layer without impacting
+   other layers.
+  \item
+   The network protocol was designed in seven layers for a variety of reasons.
+   While more layers would allow for lower complexity in each layer,
+   layers needs to interface with their direct siblings above and below.
+   The creation of these interfaces is not trivial and therefore the number of
+   layers should be kept to a reasonable count. When choosing the functionality
+   of each layer, similar functional steps in the communication process are
+   grouped up abstract the process. Additionally, as previously mentioned, by
+   abstracting each step into layers, changes can be made to the operation of a
+   single layer while not affecting other ones.
+   % TODO
+\end{enumerate}
+
+\section*{Question 2}
+\subsection*{RRC (Radio Resource Control)}
+The radio resource control later of the LTE architecture is the most difficult
+layer to classify in terms of the OSI model. It has a wide range of functionality
+mostly pertaining to that of the session layer. The key management for encryption
+as well as mobility and QoS functionality are not explicitly defined by the OSI
+model, however, they are related to session management.
+
+\subsection*{PDCP (Packet Data Convergence Protocol)}
+The PDCP layer will provide a protocol to send and receiving acknowledgment
+units as well as provide data integrity checks on these units. It is mostly draws
+from aspects described in the data link layer of the OSI model.
+
+\subsection*{RLC (Radio Link Control)}
+The RLC layer will segment the data into packets and verify in-sequence delivery
+of these packets. The OSI model would group together some of the functionality of
+the PDCP and RLC layers to formulate the data link layer.
+
+\subsection*{MAC (Medium Access Control)}
+Manages the physical connection by scheduling the sending and receiving of
+packets. Incorporates parts of the data link and physical layers in the OSI model.
+
+\subsection*{Wireless mobile connections}
+Wireless mobile connections are especially vulnerable to cyber attacks because their
+data is being transmitted through a public medium at long range. This means a potential
+attacker may "listen in" on messages transmitted through mobile protocols. Security and
+encryption has a much stronger emphasis in the mobile network architecture that previously
+noted in the OSI model. While data integrity is something that both the wired and mobile
+links need to take into account, ciphering to verify packet integrity is not explicitly
+defined in the OSI model. The LTE PDCP layer will request re-transmission of a packet if
+it cannot be verified against its cipher.
+
+\section*{Question 3}
+\subsection*{Part 1}
+In the worst case scenario of the described problem, the packet would need to wait
+for the transmission delay of two other $\SI{10}{kbit}$ at each of the three
+routers.
+
+There are four physical lines connecting the sender and receivers via the three
+intermediate routers. The total transmission time can then be calculated between
+the start of the message being sent until the message has been fully received by
+the receiver.
+
+We start with the basic equations and definitions of nodal delay:
+\begin{align}
+d_{nodal} &= d_{proc} + d_{queue} + d_{trans} + d_{prop} \\
+d_{proc} &\approx 0 \\
+d_{queue} &= d_{trans} * n_{packets\_in\_queue} \\
+d_{trans} &= L_{packet\_length} / R_{link\_bandwidth} \\
+d_{prop} &= d_{line\_length} / s_{prop\_speed} 
+\end{align}
+
+Equation 2 shows a negligible time delay for the processing of each packet. This
+is due to the sub-millisecond delay seen during this step.
+Equation 3 was derived with this question in mind. The message in question needs
+to wait for the transmission delay of two other 10k messages at each of the three
+intermediate routers.
+
+We can therefore arrive at an expression for the entire packet transmission:
+\begin{align}
+d_{total} &= d_{trans\_sender} + d_{physical\_line} + 3d_{router} \\
+&= d_{trans} + \SI{1000}{km}/\SI{0.3}{\km\per\us} + 3d_{queue} + 3d_{trans} \\
+d_{trans} &= \SI{10000}{bits} / \SI{10}{Mpbs} = \SI{1}{\ms} \\
+d_{queue} &= \SI{1}{\ms} * \SI{2}{packets} = \SI{2}{\ms} \\
+d_{total} &= \SI{1}{\ms} + \SI{3.33}{\ms} + 3\cdot\SI{2}{\ms} + 3\cdot\SI{1}{\ms} = \pmb{\SI{13.33}{\ms}}
+\end{align}
+
+\subsection*{Part 2}
+%TODO
+
+
+\section*{Question 4}
+
+\end{document}

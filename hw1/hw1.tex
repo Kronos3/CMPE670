@@ -127,18 +127,38 @@ to wait for the transmission delay of two other 10k messages at each of the thre
 intermediate routers.
 
 We can therefore arrive at an expression for the entire packet transmission:
-\begin{align}
+\begin{align*}
 d_{total} &= d_{trans\_sender} + d_{physical\_line} + 3d_{router} \\
 &= d_{trans} + \SI{1000}{km}/\SI{0.3}{\km\per\us} + 3d_{queue} + 3d_{trans} \\
 d_{trans} &= \SI{10000}{bits} / \SI{10}{Mpbs} = \SI{1}{\ms} \\
 d_{queue} &= \SI{1}{\ms} * \SI{2}{packets} = \SI{2}{\ms} \\
 d_{total} &= \SI{1}{\ms} + \SI{3.33}{\ms} + 3\cdot\SI{2}{\ms} + 3\cdot\SI{1}{\ms} = \pmb{\SI{13.33}{\ms}}
-\end{align}
+\end{align*}
 
 \subsection*{Part 2}
 %TODO
 
 
 \section*{Question 4}
+
+To calculate the minimum link capacity we start with the transmission delay
+at each intermediate node as well as their definitions based on the question:
+\begin{align*}
+d_{nodal} &= d_{proc} + d_{queue} + d_{trans} + d_{prop} \\
+d_{proc} &= 0 \\
+d_{trans} &= L_{packet\_length} / R_{link\_bandwidth} = \frac{\SI{1}{Mbytes}}{R}(\frac{\SI{8}{bits}}{\SI{1}{byte}}) = \frac{\SI{8}{Mbits}}{R} \\
+d_{queue} &= d_{trans} * n_{packets\_in\_queue} = d_{trans} * 4 \\
+d_{prop} &= d_{line\_length} / s_{prop\_speed} = \frac{\SI{200e3}{m}}{\SI{2e8}{\m/\s}} = \SI{1}{ms}
+\end{align*}
+
+With the expression for the delay at each node described in terms of the link bandwidth,
+$R$, an expression is derived in terms of a single node $d_{nodal}$.
+
+\begin{align*}
+\SI{1}{s} = d_{total} &= d_{trans} + d_{prop} + 2 \cdot d_{nodal} \\
+&= \frac{\SI{8}{Mbits}}{R} + \SI{1}{ms} + 2(0 + 4\frac{\SI{8}{Mbits}}{R} + \frac{\SI{8}{Mbits}}{R} + \SI{1}{ms}) \\
+\SI{1}{s} &= 11\frac{\SI{8}{Mbits}}{\SI[parse-numbers = false]{R}{Mbps}} + \SI{0.003}{s} \\
+R &= \pmb{\SI{88.265}{Mbps}} 
+\end{align*}
 
 \end{document}

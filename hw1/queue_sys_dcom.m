@@ -4,7 +4,7 @@ clear all;
 close all;
 
 delta = 1e-5; % simulation step in sec
-simlen = 0.1; % simulation duration in minutes
+simlen = 0.01; % simulation duration in minutes
 M = round(simlen*60/delta); % number of simulation step for 50 hours, in units of delta
 % Nnodes = 2;
 
@@ -173,6 +173,4 @@ for i=2:M
                 end
         end
     end
-end    
- 
-
+end

@@ -12,6 +12,8 @@
 \usepackage{sectsty}
 \usepackage{enumitem}
 \usepackage{siunitx}
+\usepackage{subfig}
+\usepackage{stackengine}
 
 
 \sectionfont{\fontsize{14.4}{17}\selectfont}
@@ -28,8 +30,8 @@
 
 % Edit these as appropriate
 \newcommand\course{CMPE 670}
-\newcommand\hwnumber{1}                  % <-- homework number
-\newcommand\NetIDa{Andrei Tumbar}           % <-- NetID of person #1
+\newcommand\hwnumber{1}
+\newcommand\NetIDa{Andrei Tumbar}
 
 \pagestyle{fancyplain}
 \headheight 35pt
@@ -57,15 +59,16 @@
    other layers.
   \item
    The network protocol was designed in seven layers for a variety of reasons.
-   While more layers would allow for lower complexity in each layer,
+   Firstly, while more layers would allow for lower complexity in each layer,
    layers needs to interface with their direct siblings above and below.
    The creation of these interfaces is not trivial and therefore the number of
-   layers should be kept to a reasonable count. When choosing the functionality
+   layers should be kept to a reasonable count. Secondly, when choosing the functionality
    of each layer, similar functional steps in the communication process are
-   grouped up abstract the process. Additionally, as previously mentioned, by
-   abstracting each step into layers, changes can be made to the operation of a
-   single layer while not affecting other ones.
-   % TODO
+   grouped up abstract the process. Thirdly, by abstracting each step into layers,
+   changes can be made to the operation of a single layer while not affecting other ones.
+   Fourthly, engineers took into account previous networking experience to decide where
+   the boundaries between different layer would go. Finally, engineers created layers
+   where they expected interfaces to be standardized in the future.
 \end{enumerate}
 
 \section*{Question 2}
@@ -103,7 +106,7 @@ it cannot be verified against its cipher.
 \section*{Question 3}
 \subsection*{Part 1}
 In the worst case scenario of the described problem, the packet would need to wait
-for the transmission delay of two other $\SI{10}{kbit}$ at each of the three
+for the transmission delay of two other $\SI{10}{kb}$ at each of the three
 routers.
 
 There are four physical lines connecting the sender and receivers via the three
@@ -130,14 +133,26 @@ We can therefore arrive at an expression for the entire packet transmission:
 \begin{align*}
 d_{total} &= d_{trans\_sender} + d_{physical\_line} + 3d_{router} \\
 &= d_{trans} + \SI{1000}{km}/\SI{0.3}{\km\per\us} + 3d_{queue} + 3d_{trans} \\
-d_{trans} &= \SI{10000}{bits} / \SI{10}{Mpbs} = \SI{1}{\ms} \\
-d_{queue} &= \SI{1}{\ms} * \SI{2}{packets} = \SI{2}{\ms} \\
-d_{total} &= \SI{1}{\ms} + \SI{3.33}{\ms} + 3\cdot\SI{2}{\ms} + 3\cdot\SI{1}{\ms} = \pmb{\SI{13.33}{\ms}}
+d_{trans} &= \SI{80000}{bits} / \SI{10}{Mpbs} = \SI{8}{\ms} \\
+d_{queue} &= \SI{8}{\ms} * \SI{2}{packets} = \SI{16}{\ms} \\
+d_{total} &= \SI{8}{\ms} + \SI{3.33}{\ms} + 3\cdot\SI{16}{\ms} + 3\cdot\SI{8}{\ms} = \pmb{\SI{83.33}{\ms}}
 \end{align*}
 
 \subsection*{Part 2}
-%TODO
+The receiver needs to a send a message early enough so that during the time
+taken for the message to reach the transmitter, the receiver cannot receive
+more data that it can handle. This concept is called the bandwidth-delay product.
 
+\begin{align*}
+d_{delay\_total} \cdot R_{link\_bandwidth} &= n_{buffer\_bits} \\
+\SI{83.33}{ms} \cdot \SI{10}{Mpbs} &= n_{buffer\_bits} \\
+\SI{83.33e-3}{s} \cdot 2 \cdot \SI{10e6}{bps} &= \SI{1.667}{Mbit} = \pmb{\SI{208.375}{kbytes}}
+\end{align*}
+
+Another way to describe this byte count is the maximum number of bytes that
+can be received during the time it takes a message to travel from the receiver
+to the transmitter. The result is multiplied by $2$ because we must take into account
+the delay for a round-trip instead of a single direction.
 
 \section*{Question 4}
 
@@ -160,5 +175,115 @@ $R$, an expression is derived in terms of a single node $d_{nodal}$.
 \SI{1}{s} &= 11\frac{\SI{8}{Mbits}}{\SI[parse-numbers = false]{R}{Mbps}} + \SI{0.003}{s} \\
 R &= \pmb{\SI{88.265}{Mbps}} 
 \end{align*}
+
+\section*{Question 5}
+\subsection*{Part a}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=5.5in]{figure1.png}
+\caption{Plot showing the packet size distribution passing through Node 4.}
+\label{fig:pa}
+\end{figure}
+
+Figure \ref{fig:pa} shows an exponential distribution of the of the packet
+sizes passing through Node 4 of the simulated network.
+
+\subsection*{Part b}
+
+Using the matlab simulator, a variety of bitrates were tested on Node 4 to analyze the
+effect that service rate has on the internal packet queue of a routing node.
+
+\pagebreak
+
+\begin{table}[h!]
+    \renewcommand{\arraystretch}{1.3}
+    \setlength{\tabcolsep}{12pt}
+    \begin{center}
+        \begin{tabular}{|c|c|c|}\hline
+        Bitrate & Time spent in Node 4 & Average queue length (packets)\\\hline
+        \SI{450}{kbps} & \SI{0.2588}{s} & 167.6696 \\\hline
+        \SI{555.556}{kbps} & \SI{0.0128}{s} & 9.8181 \\\hline
+        \SI{600}{kbps} & \SI{0.0107}{s} & 5.3916 \\\hline
+        \SI{666.667}{kbps} & \SI{0.0060}{s} & 2.9483 \\\hline
+        \SI{750}{kbps} & \SI{0.0040}{s} & 2.0296 \\\hline
+        \SI{1}{Mbps} & \SI{0.0022}{s} & 1.0651 \\\hline
+        \SI{1.5}{Mbps} & \SI{0.0011}{s} & 0.5692 \\\hline
+        \SI{2}{Mbps} & \SI{0.00071}{s} & 0.3539 \\\hline
+        \end{tabular}
+    \end{center}
+    \label{tab:tim}
+\end{table}
+
+The queue length inside Node 4 is graphed as a function of time for all of the
+service bitrates in question.
+
+\begin{figure}[h!]
+  \begin{tabular}{cc}
+    \stackunder{\includegraphics[width = 3in]{q_450k}}{\SI{450}{kbps}} &
+    \stackunder{\includegraphics[width = 3in]{q_555_556k}}{\SI{555.556}{kbps}}\\
+    \stackunder{\includegraphics[width = 3in]{q_600k}}{\SI{600}{kbps}} &
+    \stackunder{\includegraphics[width = 3in]{q_666_667k}}{\SI{666.667}{kbps}}\\
+  \end{tabular}
+\end{figure}
+
+\pagebreak
+
+\begin{figure}[h!]
+  \begin{tabular}{cc}
+    \stackunder{\includegraphics[width = 3in]{q_750k}}{\SI{750}{kbps}} &
+    \stackunder{\includegraphics[width = 3in]{q_1m}}{\SI{1}{mbps}}\\
+    \stackunder{\includegraphics[width = 3in]{q_1_5m}}{\SI{1.5}{mbps}} &
+    \stackunder{\includegraphics[width = 3in]{q_2m}}{\SI{2}{mbps}}\\
+  \end{tabular}
+\end{figure}
+
+In reality, the queue size of a node inside a network is bounded by the maximum size
+of the queue. Any overflow will result in dropped packets. For the sake of the this
+example however, the number of packets inside a queue will not increase to infinity
+if the service rate is faster than arrival rate. This is because packets are processed
+and sent out faster than they can be received. According to the plots above, the only
+service rate that increase without bound is the \SI{450}{kbps} service rate. Looking at
+the higher service rates, while packets do not accumulate inside the queue, higher service
+will accumulate fewer packets on average because the node is able to transmit each packet
+faster.
+
+\pagebreak
+
+\subsection*{Part c}
+
+Using the data from Part B, the mean time spend in Node 4 was plotted as a function
+of service rate. The \SI{450}{kbps} point was omitted because it operated under a
+different set of rules.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width = 5in]{mean_time}
+  \caption{Time in node (seconds) vs service rate (mbps)}
+  \label{fig:pc}
+\end{figure}
+
+According to Figure \ref{fig:pc}, as the service rate decreases approaching 
+500 kbps, the time in the node approaches infinity because the node cannot
+process the data fast enough to keep up with the incoming data.
+
+\pagebreak
+
+\subsection*{Part d}
+
+Using the data from Part B, the average queue length in Node 4 was plotted as a function
+of service rate. The \SI{450}{kbps} point was omitted because it operated under a
+different set of rules.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width = 5in]{mean_length}
+  \caption{Queue length (packets) vs service rate (mbps)}
+  \label{fig:ql}
+\end{figure}
+
+The results shown in Figure \ref{fig:ql}, the queue length will behave similarly to
+the time spend in the node. As the service rate approaches \SI{500}{kbps}, the queue
+length will approach infinity.
 
 \end{document}

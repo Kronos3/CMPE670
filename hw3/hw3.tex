@@ -1,0 +1,135 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage{fullpage}
+\usepackage[top=2cm, bottom=4.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{amsmath,amsthm,amsfonts,amssymb,amscd}
+\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{fancyhdr}
+\usepackage{mathrsfs}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{sectsty}
+\usepackage{enumitem}
+\usepackage{siunitx}
+\usepackage{stackengine}
+\usepackage{subcaption}
+\usepackage{scalerel}
+\usepackage{pdfpages}
+
+
+\sectionfont{\fontsize{14.4}{17}\selectfont}
+\subsectionfont{\fontsize{10}{12}\selectfont}
+
+\hypersetup{%
+  colorlinks=true,
+  linkcolor=blue,
+  linkbordercolor={0 0 1}
+}
+
+
+\newcommand\ddfrac[2]{\frac{\displaystyle #1}{\displaystyle #2}}
+
+
+\setlength{\parindent}{0.0in}
+\setlength{\parskip}{0.05in}
+
+% Edit these as appropriate
+\newcommand\course{CMPE 670}
+\newcommand\hwnumber{3}
+\newcommand\NetIDa{Andrei Tumbar}
+
+\pagestyle{fancyplain}
+\headheight 35pt
+\lhead{\NetIDa}
+\chead{\textbf{\Large Homework \hwnumber}}
+\rhead{\course \\ \today}
+\lfoot{}
+\cfoot{}
+\rfoot{\small\thepage}
+\headsep 1.5em
+
+\renewcommand{\theenumi}{\Alph{enumi}}
+
+
+% Long division commands
+\newcommand\showdiv[1]{\overline{\smash{\hstretch{.5}{)}\mkern-3.2mu\hstretch{.5}{)}}#1}}
+\let\ph\phantom
+
+\begin{document}
+
+\section*{Question 1}
+
+\begin{enumerate}[label=\alph*)]
+\item Packet 112 is sent by the client.
+\item The server's IP is 216.75.194.220 and its port is 443 (https).
+\item The next TCP sequence number will be 283. This is because the current
+      sequence number is 79 and the message length is 204, $79+204=283$.
+\item Packet 112 contains 3 SSL records.
+\item Packet 112 contains an encrypted master secret: "Encrypted Handshake Message". 
+\end{enumerate}
+
+\section*{Question 2}
+In mobile IP, the mobile device must first forward to a base station which is
+then connected to the greater network. Mobile IP will also need to contend with
+channel utilization and conflicts more than wired does.
+
+\section*{Question 3}
+\begin{enumerate}[label=\alph*)]
+\item
+\begin{align*}
+p &= 5\\
+q &= 11\\
+n = pq &= \mathbf{55}\\
+z = (p-1)(q-1) = 4 \cdot 10 &= \mathbf{40} 
+\end{align*}
+
+\item 3 is a good choice for $e$ because it shares no common factors with z (40).
+\item To find $x\mod 40 = 1$, there are only a couple of options that are less that
+160: $1, 41, 81, 121 $. The only number divisible by 3 is 81. Therefore $d$ must be
+$27$.
+\item
+\begin{align*}
+c &= m^e \mod n\\
+c &= 8^3 \mod 55 = \mathbf{17}
+\end{align*}
+\end{enumerate}
+
+\section*{Question 4}
+\begin{enumerate}[label=\alph*)]
+\item False
+\item True
+\item True
+\item False
+\end{enumerate}
+
+\section*{Question 5}
+\begin{enumerate}[label=\alph*)]
+\item The reciever will still be able to retrieve the original message even
+      if one of the aggregate pulses was corrupted. This is because the 8
+      aggregate pulses are redundant and the average of the code will decode
+      into the original signal.
+\item Even if two of the eight pulses were corrupted, DS/CDMA would still be
+      able to extract the original message.
+\item The reciever will multiple each bit by the chipping sequence. Each of these
+      These numbers are then averaged over the number of bits in the chipping
+      sequence. Ideally, a "1" bit will result in the chipping sequence and a "-1"
+      bit will result in an inverted chipping sequence. The reciever can determine
+      which bit was the original by averaging the recieved data using the following
+      formula:
+      \begin{equation*}
+      \ddfrac{\sum_{m=1}^{M}{Z_{i,m}^*\cdot c_m}}{M}
+      \end{equation*}
+      Where $M$ is the length of the chipping sequence,
+      $Z_{i}$ is the current slot inside the stream and $c$ is the
+      chipping sequence. Note that $M$-bits inside the encoded stream will
+      decode into a single bit.
+\end{enumerate}
+
+\section*{Question 6}
+Topic: Active Networking
+
+Great job outlining this topic. I wonder if hardware currently found in critical points of the internet could handle the increased processing required to implement active networking. Obviously, per-packet, the processing is quite basic, however, some routers need to handle an extremely high volume of packets so interpreting software instructions could prove to bog-down high traffic nodes.
+
+
+\end{document}
